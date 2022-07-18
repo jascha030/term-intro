@@ -23,6 +23,15 @@ fn main() -> Result<()> {
     let main_fig = font.convert("Hackerman Mode 030");
 
     let (cols, rows) = size()?;
+    let dimmensions: FIGDimmensions = calculate_dimmensions(main_fig.unwrap(), cols);
+
+    if dimmensions.rows.gt(&(1 as u32)) {
+        for word in str_words {
+            let w = calculate_width(font.convert(word).unwrap());
+        }
+    }
+
+  //  println!("{:?}", dimmensions);
 
     Ok(())
 }
@@ -37,3 +46,31 @@ fn calculate_width(figure: FIGure) -> u32 {
     return width;
 }
 
+fn calculate_dimmensions(figure: FIGure, cols: u16) -> FIGDimmensions {
+    let mut width: u32 = 0;
+    let mut count = 0;
+    let mut bwidth = 0;
+    let mut breakpoints: Vec<u32> = Vec::new();
+
+    for char in figure.characters {
+        bwidth += char.width;
+
+        if bwidth.gt(&(cols as u32)) {
+            bwidth = char.width;
+            breakpoints.push(count)
+        }
+
+        width += char.width;
+        count += 1
+    }
+
+    let rows = ((width / &(cols as u32)) as u32) + (((width % &(cols as u32)) > 0) as u32);
+
+    return FIGDimmensions {
+        width,
+        rows,
+        line_height: figure.height,
+        characters: count,
+        breakpoints,
+    };
+}
