@@ -1,4 +1,4 @@
-use figlet_rs::FIGfont;
+use crossterm::terminal::*;
 use figlet_rs::{FIGfont, FIGure};
 use std::io::Result;
 use std::vec::Vec;
@@ -15,6 +15,15 @@ struct FIGDimmensions {
 
 fn main() -> Result<()> {
     let font = FIGfont::from_file("resources/roman.flf").unwrap();
+    let space_width: u32 = font.convert(" ").unwrap().characters.first().unwrap().width;
+
+    let intro_string: String = "Hackerman Mode 030".to_string();
+    let str_words: Vec<&str> = intro_string.split(" ").collect();
+
+    let main_fig = font.convert("Hackerman Mode 030");
+
+    let (cols, rows) = size()?;
+
     Ok(())
 }
 
