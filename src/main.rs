@@ -15,21 +15,27 @@ struct FIGDimmensions {
 
 fn main() -> Result<()> {
     let font = FIGfont::from_file("resources/roman.flf").unwrap();
-    let space_width: u32 = font.convert(" ").unwrap().characters.first().unwrap().width;
+    //let space_width: u32 = font.convert(" ").unwrap().characters.first().unwrap().width;
 
     let intro_string: String = "Hackerman Mode 030".to_string();
-    let str_words: Vec<&str> = intro_string.split(" ").collect();
+    //let str_words: Vec<&str> = intro_string.split(" ").collect();
 
-    let main_fig = font.convert("Hackerman Mode 030");
+    //let main_fig = font.convert("Hackerman Mode 030").unwrap();
+    let main_fig = font.convert("Hackerman").unwrap();
 
     let (cols, rows) = size()?;
-    let dimmensions: FIGDimmensions = calculate_dimmensions(main_fig.unwrap(), cols);
+    //let dimmensions: FIGDimmensions = calculate_dimmensions(, cols);
 
-    if dimmensions.rows.gt(&(1 as u32)) {
-        for word in str_words {
-            let w = calculate_width(font.convert(word).unwrap());
-        }
-    }
+    //println!("{: left$}", 12, left = cols/2);
+
+
+    //if dimmensions.rows.gt(&(1 as u32)) {
+    //    for word in str_words {
+    //        let w = calculate_width(font.convert(word).unwrap());
+    //    }
+    //} else {
+    //    println!("{:^100}!", &main_fig.to_string());
+    // }
 
   //  println!("{:?}", dimmensions);
 
@@ -46,7 +52,14 @@ fn calculate_width(figure: FIGure) -> u32 {
     return width;
 }
 
-fn calculate_dimmensions(figure: FIGure, cols: u16) -> FIGDimmensions {
+fn get_font() -> FIGfont {
+    FIGfont::from_file("resources/roman.flf").unwrap()
+}
+
+fn calculate_dimmensions(source: &str, cols: u16) -> FIGDimmensions {
+    let font = get_font(); 
+    let figure = font.convert(&source).unwrap();
+
     let mut width: u32 = 0;
     let mut count = 0;
     let mut bwidth = 0;
